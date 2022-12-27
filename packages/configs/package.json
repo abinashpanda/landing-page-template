@@ -1,0 +1,9 @@
+{
+  "name": "configs",
+  "version": "0.0.1",
+  "scripts": {},
+  "devDependencies": {
+    "prettier": "^2.8.1",
+    "prettier-plugin-tailwindcss": "^0.2.1"
+  }
+}
