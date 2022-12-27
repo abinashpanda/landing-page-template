@@ -2,3 +2,6 @@
 
 # Node Modules
 node_modules
+
+# Database
+.tmp

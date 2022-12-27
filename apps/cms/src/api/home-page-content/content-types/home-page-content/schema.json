@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "home_page_contents",
+  "info": {
+    "singularName": "home-page-content",
+    "pluralName": "home-page-contents",
+    "displayName": "Home Page Content"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "heroDescription": {
+      "type": "richtext"
+    }
+  }
+}

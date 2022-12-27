@@ -5,8 +5,8 @@
     "dev": "turbo run dev"
   },
   "workspaces": [
-    "packages/*",
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.47.1",
