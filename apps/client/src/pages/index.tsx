@@ -1,9 +1,11 @@
 import { GetStaticPropsResult, InferGetStaticPropsType } from 'next'
 import Home from 'page-components/home'
 import type { HomeProps } from 'page-components/home'
-import axios from 'axios'
-import { CMSDataItem, CMSDataItems } from 'types/cms'
-import { extractDataFromCMSDataItem, extractDataFromCMSDataItems } from 'utils/data'
+import { CMSDataItem } from 'types/cms'
+import { extractDataFromCMSDataItem } from 'utils/data'
+import { getApiClient } from 'utils/client'
+import { StrapiImage } from 'types/image'
+import qs from 'query-string'
 
 type HomePageProps = InferGetStaticPropsType<typeof getStaticProps>
 
@@ -13,27 +15,19 @@ export default function HomePage({ title, heroDescription, activePrograms }: Hom
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<HomeProps>> {
   try {
-    const { data: homePageData } = await axios.get<CMSDataItem<{ title: string; heroDescription: string }>>(
-      '/home-page-contents/1',
-      {
-        baseURL: process.env.API_BASE_URL,
-      },
-    )
-    const { data: activeProgramsData } = await axios.get<CMSDataItems<{ title: string; description: string }>>(
-      '/active-programs',
-      {
-        baseURL: process.env.API_BASE_URL,
-      },
-    )
-
+    const apiClient = getApiClient()
+    const { data: homePageData } = await apiClient.get<
+      CMSDataItem<{
+        heroSection: { title: string; description: string; image: StrapiImage }[]
+        activePrograms: { title: string; description: string; icon: StrapiImage; id: number }[]
+      }>
+    >(`/home?${qs.stringify({ populate: ['heroSection', 'heroSection.image', 'activePrograms'] })}`)
     const pageData = extractDataFromCMSDataItem(homePageData)
-    const activePrograms = extractDataFromCMSDataItems(activeProgramsData)
-
     return {
       props: {
-        title: pageData.title,
-        heroDescription: pageData.heroDescription,
-        activePrograms,
+        title: pageData.heroSection[0].title,
+        heroDescription: pageData.heroSection[0].description,
+        activePrograms: pageData.activePrograms,
       },
     }
   } catch (error) {

@@ -1,15 +1,10 @@
 {
-  "kind": "collectionType",
-  "collectionName": "active_programs",
+  "collectionName": "components_section_sections",
   "info": {
-    "singularName": "active-program",
-    "pluralName": "active-programs",
-    "displayName": "Active Program"
+    "displayName": "Section",
+    "icon": "align-left"
   },
-  "options": {
-    "draftAndPublish": true
-  },
-  "pluginOptions": {},
+  "options": {},
   "attributes": {
     "title": {
       "type": "string"
@@ -17,7 +12,7 @@
     "description": {
       "type": "richtext"
     },
-    "icon": {
+    "image": {
       "allowedTypes": [
         "images",
         "files",
