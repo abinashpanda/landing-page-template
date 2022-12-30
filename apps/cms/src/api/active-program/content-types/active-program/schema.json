@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "active_programs",
+  "info": {
+    "singularName": "active-program",
+    "pluralName": "active-programs",
+    "displayName": "Active Program"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "icon": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

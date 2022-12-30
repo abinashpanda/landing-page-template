@@ -2,36 +2,38 @@ import { GetStaticPropsResult, InferGetStaticPropsType } from 'next'
 import Home from 'page-components/home'
 import type { HomeProps } from 'page-components/home'
 import axios from 'axios'
-import { CMSData } from 'types/cms'
+import { CMSDataItem, CMSDataItems } from 'types/cms'
+import { extractDataFromCMSDataItem, extractDataFromCMSDataItems } from 'utils/data'
 
 type HomePageProps = InferGetStaticPropsType<typeof getStaticProps>
 
-export default function HomePage({ title, heroDescription }: HomePageProps) {
-  return <Home title={title} heroDescription={heroDescription} />
+export default function HomePage({ title, heroDescription, activePrograms }: HomePageProps) {
+  return <Home title={title} heroDescription={heroDescription} activePrograms={activePrograms} />
 }
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<HomeProps>> {
   try {
-    const { data } = await axios.get<CMSData<{ title: string; heroDescription: string }>>('/home-page-contents', {
-      baseURL: process.env.API_BASE_URL,
-    })
+    const { data: homePageData } = await axios.get<CMSDataItem<{ title: string; heroDescription: string }>>(
+      '/home-page-contents/1',
+      {
+        baseURL: process.env.API_BASE_URL,
+      },
+    )
+    const { data: activeProgramsData } = await axios.get<CMSDataItems<{ title: string; description: string }>>(
+      '/active-programs',
+      {
+        baseURL: process.env.API_BASE_URL,
+      },
+    )
 
-    // use the first item as the data
-    const pageData = data.data?.[0]
-
-    if (!pageData) {
-      return {
-        redirect: {
-          permanent: false,
-          destination: '/404',
-        },
-      }
-    }
+    const pageData = extractDataFromCMSDataItem(homePageData)
+    const activePrograms = extractDataFromCMSDataItems(activeProgramsData)
 
     return {
       props: {
-        title: pageData.attributes.title ?? '',
-        heroDescription: pageData.attributes.heroDescription ?? '',
+        title: pageData.title,
+        heroDescription: pageData.heroDescription,
+        activePrograms,
       },
     }
   } catch (error) {
